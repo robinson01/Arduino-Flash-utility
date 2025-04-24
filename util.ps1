@@ -194,12 +194,31 @@ function Write-Flash {
 }
 
 # Main Menu
+
+Write-Host "`n################################################################"
+Write-Host "################   Arduino SPIFlash util v0.1   ################"
+Write-Host "################################################################`n"
+
 $COM_PORT = "COM2"
 $BAUD_RATE = 57600
 $chunkSize = 64
 
 do {
-    $action = Read-Host "Enter operation: (R)ead or (W)rite or (Q)uit"
+	do {
+		Write-Host "`ncurrently selected port $COM_PORT and baud $BAUD_RATE"
+		$portOk = Read-Host "Is this ok? (Y/N)"
+		switch ($portOk.ToUpper()){
+			"Y"{}
+			"N"{
+				$COM_PORT = Read-Host "`nport"
+				$BAUD_RATE = Read-Host "baud"
+			}
+			default{
+			}
+		}
+	} while ($portOk.ToUpper() -ne "Y")
+	
+    $action = Read-Host "`nEnter operation: (R)ead or (W)rite or (C)hange port or (Q)uit"
 	$continue = 'Y'
     switch ($action.ToUpper()) {
         "R" {
@@ -210,6 +229,7 @@ do {
 			# Perform the read and save
 			Read-Flash -PortName $COM_PORT -outputFile $outputFile -BaudRate $BAUD_RATE -totalBytesToRead $totalBytesToRead
 		}
+		"C" {$portOk = "N"}
         "W" { Write-Flash -PortName $COM_PORT -BaudRate $BAUD_RATE }
         "Q" { 
 			$continue = 'N'
@@ -217,4 +237,6 @@ do {
 		}
         default { Write-Host "Invalid option. Please enter R, W, or Q." }
     }
-}while ($continue -eq 'Y' -or $continue -eq 'y')
+	
+	Write-Host "`n#################################################################"
+}while ($continue.ToUpper() -eq 'Y')

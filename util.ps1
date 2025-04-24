@@ -43,7 +43,7 @@ function Read-Flash {
     $bytesReadTotal = 0
 
     # Setup progress bar
-    $progressLength = 100
+    $progressLength = 50
     $lastDisplayed = -1
 
     Write-Host "`nReading data:"

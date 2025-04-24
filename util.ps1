@@ -203,7 +203,9 @@ $COM_PORT = "COM2"
 $BAUD_RATE = 57600
 $chunkSize = 64
 
-do {
+if ($global:IsGUI -eq $true)  {}
+else{
+ do {
 	do {
 		Write-Host "`ncurrently selected port $COM_PORT and baud $BAUD_RATE"
 		$portOk = Read-Host "Is this ok? (Y/N)"
@@ -240,3 +242,4 @@ do {
 	
 	Write-Host "`n#################################################################"
 }while ($continue.ToUpper() -eq 'Y')
+}
